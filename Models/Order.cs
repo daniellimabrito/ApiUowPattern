@@ -7,6 +7,6 @@ namespace ApiUowPattern.Models
         public Guid OrderId { get; set; }
         public string TrackNumber { get; set; }
         public Guid CustomerId { get; set; }
-        public Customer Customer { get; set; }  
+        public virtual Customer Customer { get; set; }  
     }
 }
