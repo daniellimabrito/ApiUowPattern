@@ -69,6 +69,60 @@ namespace ApiUowPattern.Controllers
 
         }
 
+        [HttpPut("{id}")]
+        [Route("")]
+        public ActionResult<Order> Put(Guid id,
+            [FromServices]IOrderRepository orderRepository,
+            [FromServices]IUnitOfWork uow
+        ){
+
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var obj = orderRepository.GetById(id);
+
+            
+                obj.IsDeliveried = true;
+                obj.DeliveryTime = DateTime.Now;
+                
+                orderRepository.Update(obj);
+                uow.Commit();
+
+                return obj; 
+            }
+            catch (Exception ex)
+            {
+                var test = ex;
+                uow.Rollback();
+                return null;
+            }
+
+        }        
+
+        [HttpDelete("{id}")]
+        [Route("")]
+        public IActionResult Delete(
+            Guid id,
+            [FromServices]IOrderRepository orderRepository,
+            [FromServices]IUnitOfWork uow
+            )
+        {
+            try
+            {
+                orderRepository.Remove(id);
+                uow.Commit();
+                return Ok($"Order numer {id} removed.");
+            }
+                catch (System.Exception)
+            {
+                uow.Rollback();
+                return NoContent();
+            }
+        
+        }
+
 
     }
 }

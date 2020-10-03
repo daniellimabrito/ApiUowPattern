@@ -45,7 +45,8 @@ namespace ApiUowPattern.Repositories
 
         public void Update(Order obj)
         {
-            _context.Orders.Update(obj);
+            _context.Entry(obj).State = EntityState.Modified;
+           // _context.Orders.Update(obj);
         }
     }
 }
